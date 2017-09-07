@@ -15,6 +15,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=10)
 # plt.show()
 
 import NeuralNetwork as nn
+# from .NeuralNetwork import NeuralNetwork as nn
 
 # two-layer(input-hidden-output) neural network
 num_units = [2, 5, 2]
@@ -25,3 +26,4 @@ model.train( X_train, y_train, X_test, y_test )
 predicted = model.predict(X_test)
 labels = np.argmax(predicted, axis=1)
 np.sum(labels==y_test)/float(len(y_test))
+

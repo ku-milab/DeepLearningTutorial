@@ -7,14 +7,13 @@ class NeuralNetwork(object):
         <Network parameters>
         weights[0]: {array-like}, shape=[num_hidden_units_layer, num_features+1]
         weights[1]: {array-like}, shape=[num_classes, num_hidden_units_layer+1]
-    """
-    """
+
         <Auxiliary variables necessary for backpropagation>
         delta[0]: {array-like}, shape=[num_hidden_units_layer]
         delta[1]: {array-like}, shape=[num_classes]
 
-#         net_input[0]: {array-like}, shape=[num_hidden_units_layer]
-#         net_input[1]: {array-like}, shape=[num_classes]
+        net_input[0]: {array-like}, shape=[num_hidden_units_layer]
+        net_input[1]: {array-like}, shape=[num_classes]
     """
 
     def __init__(self, num_units, eta=0.001, epochs=100, activation_function='sigmoid', minibatch_size=16, bShuffle=True, random_state=None, verbose=False):
@@ -70,7 +69,7 @@ class NeuralNetwork(object):
     def activation(self, layer, input_value):
         W = self.weights[layer]
         aug_value = self.vector_augmentation(input_value)
-        net_value = np.dot( W, aug_value.T )
+        net_value = np.dot(W, aug_value.T)
 
         if layer == len(self.weights)-1:
             return net_value, self.softmax(net_value)
@@ -168,7 +167,7 @@ class NeuralNetwork(object):
 
             if self.verbose==True:
                 # print avg_cost
-                print 'Epoch {} out of {} is done...'.format(epoch, self.epochs)
+                print('Epoch {} out of {} is done...'.format(epoch, self.epochs))
 
     def compute_gradient(self, y):
         for i in range(len(self.delta)-1, -1, -1):
@@ -176,9 +175,11 @@ class NeuralNetwork(object):
                 self.delta[-1] = self.vector_augmentation(y-self.activation_value[-1], how='row')
             else:
                 net_value = self.vector_augmentation(self.net_value[i], how='row')
-                incoming_message = np.dot(self.weights[i].T, self.delta[i+1][1:])
-                self.delta[i] =  np.multiply( incoming_message, self.derivative_activation(net_value) )
 
+                # delta_j = h'(a_j)*(sum_k{w_k*delta_k})
+
+                incoming_message = np.dot(self.weights[i].T, self.delta[i+1][1:])
+                self.delta[i] = np.multiply(incoming_message, self.derivative_activation(net_value))
 
         gradient = []
         for i in range(len(self.weights)):
@@ -221,7 +222,7 @@ class NeuralNetwork(object):
 
     def plot_decision_regions(self, X, y, resolution=0.02):
         if X.shape[1] != 2:
-            print 'plot_decision_regions function is only valid for 2d space...'
+            print('plot_decision_regions function is only valid for 2d space...')
         else:
             # setup marker generator and color map
             markers = ('s', 'x', 'o', '^', 'v')
