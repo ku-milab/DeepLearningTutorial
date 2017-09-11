@@ -1,31 +1,22 @@
 # SK Telecom Deep Learning Lecture Plan
 
-## Day 1 (MILAB)
+## Day 1 (MILAB) 8 hours
 
-### Pytorch Basics
+### Implementing Perceptron
+included concepts : Linear models, gradient descent, difference between Batch and Stochastic method, Error backpropagation.
 
-### ML basics
-- Polynomial Curve fitting in Bishop PRML (Numpy implementation / Pytorch implementation) 
-
-### Linear models
-- Linear regression (Numpy implementation / Pytorch implementation)
-- Logistic regression (Numpy implementation / Pytorch implementation)
-- Data : MNIST / ADNI
-
-### Feed-forward neural network
-- Simple two layer Neural Network (Numpy implementation / Pytorch implementation)
-
-### Gradient Descent
-- Gradient Descent Implementation in numpy
-- Visualizing actual optimal parameter finding process
+  - Rosenblatt Perceptron
+  - Widrow Hoff Perceptron
+  - Widrow Hoff + Stochastic Gradient Descent
+  
+### Implementing Feed-forward neural network
+- Simple two layer Neural Network (Numpy implementation)
   
 ## Day 2 (MILAB + DAVIAN)
 
-### Batch vs. Stochastic (M)
-- implement batch method and Stochastic method (Numpy implementation / Pytorch implementation)
-- Comparing two method by visualizing parameter by gradient descent
- 
-### Error Backpropagation (M)
+### Pytorch Basics
+
+### Implementing Neural Network with Pytorch
 
 ### Advanced optimization algorithms (D)
 
