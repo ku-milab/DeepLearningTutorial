@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
+
 class Perceptron(object):
     """
     Parameters: eta, epochs
@@ -19,7 +20,6 @@ class Perceptron(object):
         """
         self.weights = np.zeros(1 + X.shape[1])  # 1 for bias
         self.errors = []
-        self.weightChanges = [];
 
         for _ in range(self.epochs):
             errors = 0;
@@ -32,7 +32,10 @@ class Perceptron(object):
         return self
 
     def net_input(self, X):
-        return np.dot(X, self.weights[1:]) + self.weights[0]
+        input_to_Perceptron = X
+        # output_before_activation z
+        z = np.dot(X, self.weights[1:]) + self.weights[0]
+        return z
 
     def predict(self, X):
         return np.where(self.net_input(X) >= 0.0, 1, -1)
@@ -57,6 +60,6 @@ def plot_decision_regions(X, y, classifier, resolution=0.02):
 
     # plot class samples
     for idx, c1 in enumerate(np.unique(y)):
-        plt.scatter(x=X[y == c1, 0], y=X[y == c1, 1], alpha=0.8,c=cmap(idx), marker=markers[idx], label=c1)
+        plt.scatter(x=X[y == c1, 0], y=X[y == c1, 1], alpha=0.8, c=cmap(idx), marker=markers[idx], label=c1)
 
     return
