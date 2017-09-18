@@ -36,20 +36,8 @@ class NeuralNetwork(object):
         if random_state:
             np.random.seed(random_state)
 
-    def buffer_clear(self):
-        self.weights = []
-        self.gradient = []
-        self.delta = []
-        self.net_value = []
-        self.activation_value = []
-        self.training_cost = []
-        self.training_error = []
-        self.validation_error = []
 
     def initialize_weights(self):
-        self.buffer_clear()
-        self.weights_initialized = False
-
         # Random parameter initialization
         for i in range(len(self.num_units)-1):
             self.weights.append(np.random.normal(0, 1.0, (self.num_units[i+1], 1 + self.num_units[i])))
@@ -68,8 +56,11 @@ class NeuralNetwork(object):
 
     def activation(self, layer, input_value):
         W = self.weights[layer]
-        aug_value = self.vector_augmentation(input_value)
-        net_value = np.dot(W, aug_value.T)
+        #TODO
+        #Task 1: Implement matrix calculation
+        # Dimension of W and input value have to be same. Hint, vector_augmentation() 
+        #aug_value = 
+        #net_value = 
 
         if layer == len(self.weights)-1:
             return net_value, self.softmax(net_value)
@@ -132,9 +123,8 @@ class NeuralNetwork(object):
         for epoch in range(1, self.epochs+1):
             if self.bShuffle:
                 X_data, y_data = self.shuffle(X_data, y_data)
-            costs = []
-
             for i in range(0, X_data.shape[0], self.minibatch_size):
+                # Create Minibatch
                 if (i + self.minibatch_size) <= X_data.shape[0]:
                     miniX = X_data[i:i + self.minibatch_size]
                     miniY = y_data[i:i + self.minibatch_size]
@@ -142,19 +132,19 @@ class NeuralNetwork(object):
                     miniX = X_data[i:]
                     miniY = y_data[i:]
 
-                costs = []
+                errors = []
                 batch_gradient = []
                 for xi, target in zip(miniX, miniY):
                     self.forward(xi)
-                    cost = self.compute_loss(target)
-                    costs.append(cost)
+                    error = self.compute_loss(target)
+                    errors.append(error)
                     gradient = self.compute_gradient(target)
                     batch_gradient.append(gradient)
                 acc_gradient = np.sum(batch_gradient, axis=0)
                 self.update_weights(acc_gradient)
 
-                avg_cost = np.average(costs)
-                self.training_cost.append(avg_cost)
+                avg_error = np.average(errors)
+                self.training_cost.append(avg_error)
 
                 train_predicted = self.predict(X_train)
                 train_labels = np.argmax(train_predicted, axis=1)
@@ -167,7 +157,7 @@ class NeuralNetwork(object):
 
             if self.verbose==True:
                 # print avg_cost
-                print('Epoch {} out of {} is done...'.format(epoch, self.epochs))
+                print('Epoch {} out of {} is done...'.format(epoch, self.epochs), "Validation Error %.2f%% Training Error %.2f%%"%(self.validation_error[-1]*100, self.training_error[-1]*100))
 
     def compute_gradient(self, y):
         for i in range(len(self.delta)-1, -1, -1):
@@ -177,16 +167,14 @@ class NeuralNetwork(object):
                 net_value = self.vector_augmentation(self.net_value[i], how='row')
 
                 # delta_j = h'(a_j)*(sum_k{w_k*delta_k})
-
-                incoming_message = np.dot(self.weights[i].T, self.delta[i+1][1:])
-                self.delta[i] = np.multiply(incoming_message, self.derivative_activation(net_value))
+                #TODO
+                #Task 2: Implement gradient calculation
+                #incoming_message = 
+                #self.delta[i] = 
 
         gradient = []
         for i in range(len(self.weights)):
             activation_value = self.vector_augmentation(self.activation_value[i], how='column')
-            # if i==len(self.weights)-1:
-            #     gradient.append(np.outer(self.delta[i+1], activation_value))
-            # else:
             gradient.append(np.outer(self.delta[i+1][1:], activation_value))
         return gradient
 
@@ -195,6 +183,7 @@ class NeuralNetwork(object):
             self.weights[i] += self.eta * acc_gradient[i]
 
     def vector_augmentation(self, X, how='column'):
+        # Match the dimension of activation an gradient function. (They don'y match due to the bias term W[0])
         if X.ndim == 1:
             augX = np.ones(1 + len(X))
             augX[1:] = X
@@ -214,6 +203,10 @@ class NeuralNetwork(object):
         return X[r], y[r]
 
     def one_hot_coding(self, y):
+        # One hot encoding: Vector representation of label -->
+        # 5 Class one hot encoding
+        # Ex1. 2 = [0,1,0,0,0]
+        # Ex2. 4 = [0,0,0,1,0]
         classes = np.unique(y)
         one_hot_code = np.zeros((y.shape[0], len(classes)))
         for idx, val in enumerate(y):
