@@ -1,0 +1,152 @@
+'''
+Creator: Choi Yun Jey (https://github.com/yunjey/pytorch-tutorial/blob/master/tutorials/02-intermediate/generative_adversarial_network/main.py)
+Editor: Yoon Jee Seok
+'''
+import torch
+import torchvision
+import torch.nn as nn
+import torch.nn.functional as F
+from torchvision import datasets 
+from torchvision import transforms
+from torchvision.utils import save_image
+from torch.autograd import Variable
+
+
+def to_var(x):
+    return Variable(x.cuda())
+
+def denorm(x):
+    out = (x + 1) / 2
+    return out.clamp(0, 1)
+
+# Image processing 
+transform = transforms.Compose([
+                transforms.ToTensor(),
+                transforms.Normalize(mean=(0.5, 0.5, 0.5), 
+                                     std=(0.5, 0.5, 0.5))])
+# MNIST dataset
+mnist = datasets.MNIST(root='./data/',
+                       train=True,
+                       transform=transform,
+                       download=False)
+# Data loader
+data_loader = torch.utils.data.DataLoader(dataset=mnist,
+                                          batch_size=100, 
+                                          shuffle=True)
+# Discriminator
+D = nn.Sequential(
+    nn.Linear(784, 256),
+    nn.LeakyReLU(0.2),
+    nn.Linear(256, 256),
+    nn.LeakyReLU(0.2),
+    nn.Linear(256, 1),
+    nn.Sigmoid())
+
+
+# Generator 
+#TASK 1. Define Generator Model
+#G = nn.Sequential(
+#    ,
+#    ,
+#    ,
+#    ,
+#    ,
+#    )
+
+print(G)
+
+#Sequential (
+#  (0): Linear (64 -> 256)
+#  (1): LeakyReLU (0.2)
+#  (2): Linear (256 -> 256)
+#  (3): LeakyReLU (0.2)
+#  (4): Linear (256 -> 784)
+#  (5): Tanh ()
+#)
+
+D.cuda()
+G.cuda()
+
+#Load the saved parameters
+#G_check = torch.load("./data/generator.pkl")
+#G.load_state_dict(G_check)
+#D_check = torch.load("./data/discriminator.pkl")
+#D.load_state_dict(D_check)
+
+
+# Binary cross entropy loss and optimizer
+criterion = nn.BCELoss()
+d_optimizer = torch.optim.Adam(D.parameters(), lr=0.0003)
+g_optimizer = torch.optim.Adam(G.parameters(), lr=0.0003)
+
+# Start training
+for epoch in range(200):
+    for i, (images, _) in enumerate(data_loader):
+        # Build mini-batch dataset
+        batch_size = images.size(0)
+        images = to_var(images.view(batch_size, -1))
+        
+        # Create the labels which are later used as input for the BCE loss
+        real_labels = to_var(torch.ones(batch_size))
+        fake_labels = to_var(torch.zeros(batch_size))
+
+        #============= Train the discriminator =============#
+        # Compute BCE_Loss using real images where BCE_Loss(x, y): - y * log(D(x)) - (1-y) * log(1 - D(x))
+        # Second term of the loss is always zero since real_labels == 1
+        outputs = D(images)
+        d_loss_real = criterion(outputs, real_labels)
+        real_score = outputs
+        
+        # Compute BCELoss using fake images
+        # First term of the loss is always zero since fake_labels == 0
+        z = to_var(torch.randn(batch_size, 64))
+        fake_images = G(z)
+        outputs = D(fake_images)
+        d_loss_fake = criterion(outputs, fake_labels)
+        fake_score = outputs
+        
+        # Backprop + Optimize
+        d_loss = d_loss_real + d_loss_fake
+        D.zero_grad()
+        d_loss.backward()
+        d_optimizer.step()
+        
+        #=============== Train the generator ===============#
+        #TASK 2
+        # Compute loss with fake images
+        #z = 
+        #fake_images = 
+        #outputs = 
+        
+        # We train G to maximize log(D(G(z)) instead of minimizing log(1-D(G(z))) (C.f. Minimax)
+        #g_loss = 
+        
+        # Backprop + Optimize
+        #D.
+        #G.
+        #g_loss.
+        #g_optimizer.
+        
+        if (i+1) % 300 == 0:
+            print('Epoch [%d/%d], Step[%d/%d], d_loss: %.4f, '
+                  'g_loss: %.4f, D(x): %.2f, D(G(z)): %.2f' 
+                  %(epoch, 200, i+1, 600, d_loss.data[0], g_loss.data[0],
+                    real_score.data.mean(), fake_score.data.mean()))
+    
+    # Save real images
+    if (epoch+1) == 1:
+        images = images.view(images.size(0), 1, 28, 28)
+        save_image(denorm(images.data), 'figure.png')
+        print("REAL IMAGE")
+        elice_utils.send_image('figure.png')
+    
+    # Save sampled images
+    fake_images = fake_images.view(fake_images.size(0), 1, 28, 28)
+    save_image(denorm(fake_images.data), 'figure.png')
+    print("FAKE IMAGE")
+    elice_utils.send_image('figure.png')
+
+# Save the trained parameters 
+#Try at home (Can't save in elice)
+#torch.save(G.state_dict(), './data/generator.pkl')
+#torch.save(D.state_dict(), './data/discriminator.pkl')
