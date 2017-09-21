@@ -37,7 +37,7 @@ included concepts : Linear models, gradient descent, difference between Batch an
 ### Transfer learning & Fine-tuning (M)
 - Super resolution? or a Network of VGG as feature extractor of MRI + classifier
 
-### Generative Adversarial Network
+### Generative Adversarial Network (M)
 
 ### RNN / LSTM (D)
 
