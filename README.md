@@ -18,3 +18,8 @@ Text Generation - https://colab.research.google.com/github/ku-milab/DeepLearning
 Word2Vec - https://colab.research.google.com/github/ku-milab/DeepLearningTutorial/blob/master/TF1/word2vec_TF1.ipynb  
 Image Captioning - https://colab.research.google.com/github/ku-milab/DeepLearningTutorial/blob/master/TF1/image_captioning_with_attention_TF1.ipynb  
 Neural Machine Translation - https://colab.research.google.com/github/ku-milab/DeepLearningTutorial/blob/master/TF1/nmt_with_attention_TF1.ipynb  
+
+Extra - Performance RNN  
+Blog - https://magenta.tensorflow.org/performance-rnn  
+Demo - https://magenta.tensorflow.org/demos/performance_rnn/index.html  
+Demo2- https://colab.research.google.com/notebooks/magenta/performance_rnn/performance_rnn.ipynb  
