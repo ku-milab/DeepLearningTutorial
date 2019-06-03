@@ -1,10 +1,7 @@
 # SK Telecom Deep Learning Tutorial
-1st Period
 
-https://colab.research.google.com/github/ku-milab/DeepLearningTutorial/blob/master/TF1/Neural_Style_Transfer_with_Eager_Execution_TF1.ipynb
+Google Drive Link  
+https://drive.google.com/drive/folders/168a7_v5eTcpfVMAFM7VEwSA7dOnYYGCU?usp=sharing  
 
-2nd Period
-
-https://colab.research.google.com/github/ku-milab/DeepLearningTutorial/blob/master/TF1/nmt_with_attention_TF1.ipynb
-
-https://colab.research.google.com/github/ku-milab/DeepLearningTutorial/blob/master/TF1/image_captioning_with_attention_TF1.ipynb
+Text Generation - https://colab.research.google.com/github/ku-milab/DeepLearningTutorial/blob/master/TF1/text_generation_TF1.ipynb  
+Text Classification - https://colab.research.google.com/github/ku-milab/DeepLearningTutorial/blob/master/TF1/text_classification_TF1.ipynb
